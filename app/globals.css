@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Lato:wght@300;400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-mocha:      #5C4033;
+    --color-cream:      #FAF0E6;
+    --color-gold:       #C9A84C;
+    --color-darkbrown:  #3B2A1A;
+    --color-gold-light: #E2C47A;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #FAF0E6;
+    color: #3B2A1A;
+    font-family: 'Lato', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  *:focus-visible {
+    outline: 2px solid #C9A84C;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer utilities {
+  .font-playfair { font-family: 'Playfair Display', Georgia, serif; }
+  .font-lato     { font-family: 'Lato', 'Helvetica Neue', sans-serif; }
+}
+
+@layer components {
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gold text-darkbrown font-lato font-semibold text-sm tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-200;
+  }
+  .btn-gold:hover {
+    @apply bg-gold-light shadow-[0_6px_24px_rgba(201,168,76,0.35)];
+    transform: translateY(-1px);
+  }
+  .btn-gold:active {
+    transform: translateY(0);
+  }
+
+  .btn-outline-gold {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent border border-gold text-gold font-lato font-semibold text-sm tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-200;
+  }
+  .btn-outline-gold:hover {
+    @apply bg-gold text-darkbrown;
+  }
+
+  .section-label {
+    @apply font-lato text-xs tracking-[0.3em] uppercase text-gold font-semibold mb-3;
+  }
+
+  .section-title {
+    @apply font-playfair text-4xl md:text-5xl text-darkbrown leading-tight;
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .gold-rule {
+    @apply w-16 h-px bg-gold mx-auto my-6;
+  }
+}
+
+/* Google Maps Places Autocomplete dropdown styling */
+.pac-container {
+  background-color: #FAF0E6;
+  border: 1px solid #C9A84C;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 8px 32px rgba(59, 42, 26, 0.18);
+  font-family: 'Lato', sans-serif;
+  margin-top: -1px;
+}
+.pac-item {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #3B2A1A;
+  cursor: pointer;
+  border-top: 1px solid #F0DEC8;
+}
+.pac-item:hover,
+.pac-item-selected {
+  background-color: #C9A84C20;
+}
+.pac-item-query {
+  font-size: 13px;
+  color: #5C4033;
+  font-weight: 600;
+}
+.pac-icon {
+  display: none;
+}
+.pac-logo::after {
+  display: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .fade-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
