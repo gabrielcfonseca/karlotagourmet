@@ -385,8 +385,8 @@ export default function BridalFairPage() {
 
               <p className="font-lato text-xs text-cream/30 text-center">
                 {t(
-                  'By submitting, Karlota will contact you via WhatsApp to confirm your registration and payment details.',
-                  'Ao enviar, Karlota entrará em contato pelo WhatsApp para confirmar sua inscrição e detalhes de pagamento.'
+                  'This is a pre-registration only. Karlota will reach out with more details soon.',
+                  'Este é apenas um pré-cadastro para demonstrar interesse. Karlota entrará em contato em breve com mais informações.'
                 )}
               </p>
             </form>
