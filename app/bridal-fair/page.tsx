@@ -282,15 +282,15 @@ export default function BridalFairPage() {
         <div className="max-w-lg mx-auto">
           <div className="text-center mb-10">
             <p className="font-lato text-xs tracking-[0.25em] uppercase text-gold/70 mb-3">
-              {t('Limited Spots', 'Vagas Limitadas')}
+              {t('Pre-Registration', 'Pré-Cadastro')}
             </p>
             <h2 className="font-playfair text-4xl text-cream mb-3">
-              {t('Reserve Your Spot', 'Garanta Sua Vaga')}
+              {t('Show Your Interest', 'Demonstre Seu Interesse')}
             </h2>
             <p className="font-lato text-cream/60 text-sm leading-relaxed">
               {t(
-                'Fill out the form below and Karlota will reach out with all the details to confirm your registration.',
-                'Preencha o formulário abaixo e Karlota entrará em contato com todos os detalhes para confirmar sua inscrição.'
+                'Fill out the form below to express your interest. Karlota will reach out soon with all the event details.',
+                'Preencha o formulário abaixo para demonstrar seu interesse. Karlota entrará em contato em breve com todos os detalhes do evento.'
               )}
             </p>
           </div>
