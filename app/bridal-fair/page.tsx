@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Heart, MapPin, Calendar, Star, ChevronDown, Check, MessageCircle, Mail, MessageSquare, X, Users, Sparkles, Gift } from 'lucide-react'
+import { Heart, MapPin, Calendar, Star, ChevronDown, Check, Users, Sparkles, Gift, Loader2 } from 'lucide-react'
 import Logo from '@/components/Logo'
 import { BotanicalOverlay } from '@/components/BotanicalDivider'
 import { useLang } from '@/lib/language-context'
-import { config } from '@/lib/config'
 
 // ── Countdown ─────────────────────────────────────────────────────────────────
 function Countdown() {
@@ -62,79 +61,13 @@ type LeadForm = {
 
 const INITIAL: LeadForm = { name: '', email: '', whatsapp: '', weddingDate: '', guestCount: '', howHeard: '' }
 
-function buildLeadMessage(form: LeadForm): string {
-  return (
-    `Olá Karlota! Me chamo ${form.name} e tenho interesse em participar do Bridal Experience by Karlota no dia 7 de junho em Orlando! ` +
-    `Meu WhatsApp é ${form.whatsapp} e meu e-mail é ${form.email}. ` +
-    (form.weddingDate ? `Meu casamento está previsto para ${form.weddingDate}. ` : '') +
-    (form.guestCount  ? `Espero ter aproximadamente ${form.guestCount} convidados. ` : '') +
-    (form.howHeard    ? `Fiquei sabendo através de: ${form.howHeard}. ` : '') +
-    `Aguardo mais informações sobre como garantir minha vaga! 💍✨`
-  )
-}
-
-function SubmitModal({ form, onClose }: { form: LeadForm; onClose: () => void }) {
-  const message = buildLeadMessage(form)
-  const waLink    = `https://wa.me/${config.contact.whatsapp}?text=${encodeURIComponent(message)}`
-  const smsLink   = `sms:${config.contact.whatsapp}&body=${encodeURIComponent(message)}`
-  const subject   = encodeURIComponent(`Bridal Experience by Karlota — Pré-Cadastro — ${form.name}`)
-  const gmailLink = `https://mail.google.com/mail/?view=cm&to=${config.contact.email}&su=${subject}&body=${encodeURIComponent(message)}`
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-darkbrown/80 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-md bg-mocha rounded-sm border border-gold/30 shadow-2xl p-8 animate-fade-in">
-        <button onClick={onClose} className="absolute top-4 right-4 text-cream/40 hover:text-cream transition-colors cursor-pointer">
-          <X size={20} />
-        </button>
-        <div className="text-center mb-6">
-          <Heart size={28} className="text-gold mx-auto mb-3" />
-          <h3 className="font-playfair text-2xl text-cream mb-1">Quase lá!</h3>
-          <p className="font-lato text-sm text-cream/60">Escolha como enviar seu pré-cadastro para Karlota</p>
-        </div>
-        <div className="flex flex-col gap-3">
-          <a href={waLink} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-4 px-5 py-4 bg-[#25D366]/15 border border-[#25D366]/40 rounded-sm hover:bg-[#25D366]/25 transition-all cursor-pointer group">
-            <div className="w-10 h-10 rounded-full bg-[#25D366]/20 flex items-center justify-center flex-shrink-0">
-              <MessageCircle size={20} className="text-[#25D366]" />
-            </div>
-            <div>
-              <p className="font-lato font-semibold text-cream text-sm">WhatsApp</p>
-              <p className="font-lato text-cream/50 text-xs">Envia sua mensagem pelo WhatsApp</p>
-            </div>
-          </a>
-          <a href={smsLink}
-            className="flex items-center gap-4 px-5 py-4 bg-blue-500/10 border border-blue-400/30 rounded-sm hover:bg-blue-500/20 transition-all cursor-pointer group">
-            <div className="w-10 h-10 rounded-full bg-blue-500/15 flex items-center justify-center flex-shrink-0">
-              <MessageSquare size={20} className="text-blue-400" />
-            </div>
-            <div>
-              <p className="font-lato font-semibold text-cream text-sm">SMS</p>
-              <p className="font-lato text-cream/50 text-xs">Abre o aplicativo de mensagens</p>
-            </div>
-          </a>
-          <a href={gmailLink} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-4 px-5 py-4 bg-red-500/10 border border-red-400/30 rounded-sm hover:bg-red-500/20 transition-all cursor-pointer group">
-            <div className="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center flex-shrink-0">
-              <Mail size={20} className="text-red-400" />
-            </div>
-            <div>
-              <p className="font-lato font-semibold text-cream text-sm">E-mail</p>
-              <p className="font-lato text-cream/50 text-xs">Abre o Gmail com sua mensagem</p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ── Main page ──────────────────────────────────────────────────────────────────
 export default function BridalFairPage() {
   const { t } = useLang()
-  const [form, setForm]           = useState<LeadForm>(INITIAL)
-  const [showModal, setShowModal] = useState(false)
+  const [form, setForm]         = useState<LeadForm>(INITIAL)
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
 
   const update = (field: keyof LeadForm, value: string) =>
     setForm(f => ({ ...f, [field]: value }))
@@ -143,15 +76,24 @@ export default function BridalFairPage() {
 
   const inputClass = "w-full bg-white/10 border border-cream/20 rounded-sm px-4 py-3 font-lato text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200"
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!canSubmit) return
-    setShowModal(true)
-  }
-
-  const handleModalClose = () => {
-    setShowModal(false)
-    setSubmitted(true)
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/bridal-registration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error('Failed')
+      setSubmitted(true)
+    } catch {
+      setError(t('Something went wrong. Please try again.', 'Algo deu errado. Por favor, tente novamente.'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   const HIGHLIGHTS = [
@@ -377,10 +319,16 @@ export default function BridalFairPage() {
                 </select>
               </div>
 
-              <button type="submit" disabled={!canSubmit}
+              {error && (
+                <p className="font-lato text-xs text-red-400 text-center">{error}</p>
+              )}
+              <button type="submit" disabled={!canSubmit || loading}
                 className="mt-2 w-full py-4 bg-gold text-darkbrown font-lato font-bold tracking-widest uppercase text-sm rounded-sm hover:bg-gold-light transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2">
-                <Heart size={16} />
-                {t('Reserve My Spot', 'Garantir Minha Vaga')}
+                {loading ? (
+                  <><Loader2 size={16} className="animate-spin" /> {t('Sending…', 'Enviando…')}</>
+                ) : (
+                  <><Heart size={16} /> {t('Submit Pre-Registration', 'Enviar Pré-Cadastro')}</>
+                )}
               </button>
 
               <p className="font-lato text-xs text-cream/30 text-center">
@@ -405,7 +353,6 @@ export default function BridalFairPage() {
         </p>
       </footer>
 
-      {showModal && <SubmitModal form={form} onClose={handleModalClose} />}
     </div>
   )
 }
