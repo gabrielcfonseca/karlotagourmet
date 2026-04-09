@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
 
     await resend.emails.send({
-      from: 'Bridal Experience <onboarding@resend.dev>',
+      from: 'Bridal Experience <noreply@karlotagourmet.com>',
       to: 'bridalexperiencebykarlota@gmail.com',
       subject: `💍 New Pre-Registration — ${name}`,
       html: `
