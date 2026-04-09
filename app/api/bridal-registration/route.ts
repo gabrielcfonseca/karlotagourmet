@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     await resend.emails.send({
       from: 'Bridal Experience <onboarding@resend.dev>',
-      to: 'karla@karlota.net',
+      to: 'bridalexperiencebykarlota@gmail.com',
       subject: `💍 New Pre-Registration — ${name}`,
       html: `
         <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; background: #FAF0E6; padding: 40px 32px; border-radius: 4px;">
