@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { LanguageProvider } from '@/lib/language-context'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import WhatsAppButton from '@/components/WhatsAppButton'
+import ConditionalLayout from '@/components/ConditionalLayout'
 
 export const metadata: Metadata = {
   title: {
@@ -25,10 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="antialiased">
         <LanguageProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <WhatsAppButton />
+          <ConditionalLayout>{children}</ConditionalLayout>
         </LanguageProvider>
       </body>
     </html>
