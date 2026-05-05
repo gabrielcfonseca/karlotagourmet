@@ -38,6 +38,7 @@ async function savePosts(posts: Post[]): Promise<void> {
   await put(POSTS_KEY, JSON.stringify(posts, null, 2), {
     access: 'private',
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType: 'application/json',
   })
 }
