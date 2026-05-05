@@ -71,6 +71,7 @@ function MarketingContent() {
   const [editingPost, setEditingPost] = useState<Post | null>(null)
   const [form, setForm]           = useState({ ...EMPTY_FORM, date: preDate })
   const [saving, setSaving]       = useState(false)
+  const [saveError, setSaveError] = useState('')
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState('')
   const [deleteConfirm, setDeleteConfirm]   = useState<string | null>(null)
@@ -136,6 +137,7 @@ function MarketingContent() {
   function closePanel() {
     setPanelOpen(false)
     setEditingPost(null)
+    setSaveError('')
     setForm({ ...EMPTY_FORM, date: preDate })
   }
 
@@ -186,6 +188,7 @@ function MarketingContent() {
   async function savePost() {
     if (!form.type || !form.date || !form.time) return
     setSaving(true)
+    setSaveError('')
     try {
       const payload = {
         ...form,
@@ -197,10 +200,15 @@ function MarketingContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
+      const data = await res.json()
       if (res.ok) {
         await loadPosts()
         closePanel()
+      } else {
+        setSaveError(data?.error || `Error ${res.status}`)
       }
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Network error')
     } finally {
       setSaving(false)
     }
@@ -697,6 +705,13 @@ function MarketingContent() {
             </div>
 
             {/* Panel footer */}
+            {saveError && (
+              <div className="px-6 py-3 bg-red-50 border-t border-red-200 flex-shrink-0">
+                <p className="font-lato text-xs text-red-700">
+                  <strong>Error:</strong> {saveError}
+                </p>
+              </div>
+            )}
             <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-gray-200 flex-shrink-0 bg-white">
               <button
                 onClick={closePanel}

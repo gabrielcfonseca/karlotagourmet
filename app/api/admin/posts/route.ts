@@ -20,15 +20,11 @@ export interface Post {
 }
 
 async function getPosts(): Promise<Post[]> {
-  try {
-    const { blobs } = await list({ prefix: POSTS_KEY })
-    if (blobs.length === 0) return []
-    const res = await fetch(blobs[0].url, { cache: 'no-store' })
-    if (!res.ok) return []
-    return (await res.json()) as Post[]
-  } catch {
-    return []
-  }
+  const { blobs } = await list({ prefix: POSTS_KEY })
+  if (blobs.length === 0) return []
+  const res = await fetch(blobs[0].url, { cache: 'no-store' })
+  if (!res.ok) return []
+  return (await res.json()) as Post[]
 }
 
 async function savePosts(posts: Post[]): Promise<void> {
@@ -42,11 +38,12 @@ async function savePosts(posts: Post[]): Promise<void> {
 export async function GET() {
   try {
     const posts = await getPosts()
-    // Sort by date ascending
     posts.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`))
     return NextResponse.json(posts)
-  } catch {
-    return NextResponse.json({ error: 'Failed to load posts' }, { status: 500 })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[admin/posts GET]', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
 
@@ -80,8 +77,10 @@ export async function POST(req: NextRequest) {
     await savePosts(posts)
 
     return NextResponse.json(newPost, { status: 201 })
-  } catch {
-    return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[admin/posts POST]', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
 
@@ -110,8 +109,10 @@ export async function PUT(req: NextRequest) {
 
     await savePosts(posts)
     return NextResponse.json(posts[index])
-  } catch {
-    return NextResponse.json({ error: 'Failed to update post' }, { status: 500 })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[admin/posts PUT]', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
 
@@ -132,7 +133,9 @@ export async function DELETE(req: NextRequest) {
 
     await savePosts(filtered)
     return NextResponse.json({ success: true })
-  } catch {
-    return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[admin/posts DELETE]', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
