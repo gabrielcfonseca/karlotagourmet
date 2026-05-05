@@ -22,14 +22,21 @@ export interface Post {
 async function getPosts(): Promise<Post[]> {
   const { blobs } = await list({ prefix: POSTS_KEY })
   if (blobs.length === 0) return []
-  const res = await fetch(blobs[0].url, { cache: 'no-store' })
+
+  // Private blobs need the token as Authorization header
+  const res = await fetch(blobs[0].url, {
+    cache: 'no-store',
+    headers: process.env.BLOB_READ_WRITE_TOKEN
+      ? { Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}` }
+      : {},
+  })
   if (!res.ok) return []
   return (await res.json()) as Post[]
 }
 
 async function savePosts(posts: Post[]): Promise<void> {
   await put(POSTS_KEY, JSON.stringify(posts, null, 2), {
-    access: 'public',
+    access: 'private',
     addRandomSuffix: false,
     contentType: 'application/json',
   })

@@ -427,7 +427,7 @@ function MarketingContent() {
                         <div className="w-14 h-14 rounded-sm overflow-hidden bg-gray-100 flex-shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                            src={post.fileUrl}
+                            src={`/api/admin/media?url=${encodeURIComponent(post.fileUrl!)}`}
                             alt={post.fileName}
                             className="w-full h-full object-cover"
                           />
@@ -441,7 +441,7 @@ function MarketingContent() {
                         <p className="font-lato text-xs text-mocha truncate">{post.fileName}</p>
                         <p className="font-lato text-[10px] text-mocha/40">{formatFileSize(post.fileSize)}</p>
                         <a
-                          href={post.fileUrl}
+                          href={`/api/admin/media?url=${encodeURIComponent(post.fileUrl!)}`}
                           download={post.fileName}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -628,7 +628,7 @@ function MarketingContent() {
                       <div className="relative aspect-video bg-gray-100">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={form.fileUrl}
+                          src={`/api/admin/media?url=${encodeURIComponent(form.fileUrl)}`}
                           alt={form.fileName}
                           className="w-full h-full object-contain"
                         />
@@ -646,7 +646,7 @@ function MarketingContent() {
                     )}
                     <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-t border-gray-200">
                       <a
-                        href={form.fileUrl}
+                        href={`/api/admin/media?url=${encodeURIComponent(form.fileUrl)}`}
                         download={form.fileName}
                         target="_blank"
                         rel="noopener noreferrer"

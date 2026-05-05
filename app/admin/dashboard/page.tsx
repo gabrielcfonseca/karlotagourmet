@@ -297,7 +297,7 @@ export default function CalendarPage() {
                             <div className="relative rounded-sm overflow-hidden aspect-square bg-gray-100">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
-                                src={post.fileUrl}
+                                src={`/api/admin/media?url=${encodeURIComponent(post.fileUrl!)}`}
                                 alt={post.fileName || 'Post media'}
                                 className="w-full h-full object-cover"
                               />
@@ -310,7 +310,7 @@ export default function CalendarPage() {
                             </div>
                           )}
                           <a
-                            href={post.fileUrl}
+                            href={`/api/admin/media?url=${encodeURIComponent(post.fileUrl!)}`}
                             download={post.fileName}
                             target="_blank"
                             rel="noopener noreferrer"

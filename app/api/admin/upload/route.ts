@@ -11,15 +11,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Build a unique storage path preserving original file extension
-    const ext = file.name.split('.').pop() ?? ''
     const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')
     const storagePath = `admin/media/${Date.now()}-${safeName}`
 
     // Store at original quality — no processing, no compression
     const blob = await put(storagePath, file, {
-      access: 'public',
+      access: 'private',
       addRandomSuffix: false,
-      contentType: file.type || (ext ? `application/octet-stream` : undefined),
+      contentType: file.type || undefined,
     })
 
     return NextResponse.json({
@@ -29,10 +28,10 @@ export async function POST(req: NextRequest) {
       type: file.type,
     })
   } catch (err) {
-    console.error('upload error:', err)
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[admin/upload]', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
 
-// Allow large uploads (videos up to 500 MB)
 export const maxDuration = 60
