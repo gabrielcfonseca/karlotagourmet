@@ -19,8 +19,9 @@ module.exports = {
         'cream-dark':  '#F0DEC8',
       },
       fontFamily: {
-        playfair: ['Playfair Display', 'Georgia', 'serif'],
-        lato:     ['Lato', 'Helvetica Neue', 'sans-serif'],
+        // Wire Tailwind classes to the CSS variables injected by next/font
+        playfair: ['var(--font-playfair)', 'Georgia', 'serif'],
+        lato:     ['var(--font-lato)', 'Helvetica Neue', 'sans-serif'],
       },
       backgroundImage: {
         'hero-gradient': 'linear-gradient(to bottom, rgba(44,27,17,0.72) 0%, rgba(44,27,17,0.55) 60%, rgba(44,27,17,0.80) 100%)',
