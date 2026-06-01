@@ -1,27 +1,41 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, Lato } from 'next/font/google'
+import { Fraunces, Inter_Tight, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from '@/lib/language-context'
 import ConditionalLayout from '@/components/ConditionalLayout'
 
-// ─── Design-system fonts ─────────────────────────────────────────────────────
-// Playfair Display — headings, display text, editorial moments
-const playfair = Playfair_Display({
+// ─── Karlota Gourmet — Design System Fonts ───────────────────────────────────
+
+// Fraunces — display / editorial / headings
+// Optical serif with warmth; used for all h1–h6, section titles, hero text
+const fraunces = Fraunces({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['300', '400', '500', '600', '700', '900'],
   style: ['normal', 'italic'],
-  variable: '--font-playfair',
+  variable: '--font-fraunces',
   display: 'swap',
 })
 
-// Lato — all UI text, labels, body copy, buttons
-const lato = Lato({
+// Inter Tight — UI / body / labels / buttons
+// Clean condensed sans-serif; used for all body copy, captions, UI elements
+const interTight = Inter_Tight({
   subsets: ['latin'],
-  weight: ['300', '400', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   style: ['normal', 'italic'],
-  variable: '--font-lato',
+  variable: '--font-inter-tight',
   display: 'swap',
 })
+
+// JetBrains Mono — monospace / technical accents
+// Used sparingly for codes, tracking numbers, technical labels
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-mono',
+  display: 'swap',
+})
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
@@ -41,7 +55,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${lato.variable}`}>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${interTight.variable} ${jetbrainsMono.variable}`}
+    >
       <body className="antialiased">
         <LanguageProvider>
           <ConditionalLayout>{children}</ConditionalLayout>

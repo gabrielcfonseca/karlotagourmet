@@ -1,7 +1,11 @@
 /* ── Fonts are loaded via next/font/google in app/layout.tsx ─────────────────
-   CSS variables --font-playfair and --font-lato are injected on <html>.
-   Do NOT add a Google Fonts @import here — next/font handles all of that
-   with zero layout shift and self-hosted delivery. */
+   Design-system fonts:
+     --font-fraunces    → Fraunces     (display / headings / editorial)
+     --font-inter-tight → Inter Tight  (UI / body / buttons / labels)
+     --font-mono        → JetBrains Mono (monospace / technical accents)
+
+   Do NOT add a Google Fonts @import here — next/font handles loading,
+   subsetting, and self-hosting with zero layout shift. */
 
 @tailwind base;
 @tailwind components;
@@ -20,23 +24,28 @@
     scroll-behavior: smooth;
   }
 
-  /* Every element defaults to Lato — the UI / body font */
+  /* Every element defaults to Inter Tight */
   body {
     background-color: #FAF0E6;
     color: #3B2A1A;
-    font-family: var(--font-lato), 'Helvetica Neue', sans-serif;
+    font-family: var(--font-inter-tight), 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* All headings default to Playfair Display — the display / editorial font */
+  /* All headings use Fraunces */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-playfair), Georgia, serif;
+    font-family: var(--font-fraunces), Georgia, serif;
   }
 
-  /* Inputs, buttons, selects, textareas — keep Lato, not browser default */
+  /* Form controls — override browser default, keep Inter Tight */
   input, button, select, textarea, optgroup {
-    font-family: var(--font-lato), 'Helvetica Neue', sans-serif;
+    font-family: var(--font-inter-tight), 'Helvetica Neue', sans-serif;
+  }
+
+  /* Code / pre — JetBrains Mono */
+  code, pre, kbd, samp {
+    font-family: var(--font-mono), monospace;
   }
 
   *:focus-visible {
@@ -47,13 +56,19 @@
 }
 
 @layer utilities {
-  .font-playfair { font-family: var(--font-playfair), Georgia, serif; }
-  .font-lato     { font-family: var(--font-lato), 'Helvetica Neue', sans-serif; }
+  /* Canonical brand class names */
+  .font-fraunces    { font-family: var(--font-fraunces), Georgia, serif; }
+  .font-inter-tight { font-family: var(--font-inter-tight), 'Helvetica Neue', sans-serif; }
+  .font-mono        { font-family: var(--font-mono), monospace; }
+
+  /* Legacy aliases — keep existing pages working */
+  .font-playfair    { font-family: var(--font-fraunces), Georgia, serif; }
+  .font-lato        { font-family: var(--font-inter-tight), 'Helvetica Neue', sans-serif; }
 }
 
 @layer components {
   .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gold text-darkbrown font-lato font-semibold text-sm tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gold text-darkbrown font-inter-tight font-semibold text-sm tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-200;
   }
   .btn-gold:hover {
     @apply bg-gold-light shadow-[0_6px_24px_rgba(201,168,76,0.35)];
@@ -64,18 +79,18 @@
   }
 
   .btn-outline-gold {
-    @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent border border-gold text-gold font-lato font-semibold text-sm tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent border border-gold text-gold font-inter-tight font-semibold text-sm tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-200;
   }
   .btn-outline-gold:hover {
     @apply bg-gold text-darkbrown;
   }
 
   .section-label {
-    @apply font-lato text-xs tracking-[0.3em] uppercase text-gold font-semibold mb-3;
+    @apply font-inter-tight text-xs tracking-[0.3em] uppercase text-gold font-semibold mb-3;
   }
 
   .section-title {
-    @apply font-playfair text-4xl md:text-5xl text-darkbrown leading-tight;
+    @apply font-fraunces text-4xl md:text-5xl text-darkbrown leading-tight;
   }
 
   .fade-up {
@@ -94,14 +109,14 @@
   }
 }
 
-/* Google Maps Places Autocomplete dropdown styling */
+/* Google Maps Places Autocomplete */
 .pac-container {
   background-color: #FAF0E6;
   border: 1px solid #C9A84C;
   border-top: none;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 8px 32px rgba(59, 42, 26, 0.18);
-  font-family: var(--font-lato), sans-serif;
+  font-family: var(--font-inter-tight), sans-serif;
   margin-top: -1px;
 }
 .pac-item {
@@ -120,12 +135,8 @@
   color: #5C4033;
   font-weight: 600;
 }
-.pac-icon {
-  display: none;
-}
-.pac-logo::after {
-  display: none;
-}
+.pac-icon  { display: none; }
+.pac-logo::after { display: none; }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -135,7 +146,6 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-
   .fade-up {
     opacity: 1;
     transform: none;
