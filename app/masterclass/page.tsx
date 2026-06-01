@@ -342,7 +342,7 @@ export default function MasterclassPage() {
             </Field>
 
             {/* Maior dificuldade */}
-            <Field label="Qual sua maior dificuldade para estruturar ou escalar seu negócio digital?" required>
+            <Field label="Qual sua maior dificuldade para transformar seu dom para um negocio altamente rentavel?" required>
               <textarea
                 required
                 rows={4}
@@ -366,7 +366,7 @@ export default function MasterclassPage() {
             </Field>
 
             {/* Pergunta estratégica */}
-            <Field label="Se você pudesse fazer uma pergunta estratégica ao Rodrigo e à Adriana sobre seu negócio hoje, qual seria?" required>
+            <Field label="Se você pudesse fazer uma pergunta estratégica para Karlota sobre seu negócio hoje, qual seria?" required>
               <textarea
                 required
                 rows={4}
