@@ -20,7 +20,7 @@ export default function Navbar() {
     { href: '/questionnaire', label: t('Plan Your Event', 'Planeje seu Evento') },
     { href: '/about',         label: t('Our Story', 'Nossa História') },
     { href: '/contact',       label: t('Contact', 'Contato') },
-    { href: '/bridal-fair',   label: t('Bridal Experience 💍', 'Bridal Experience 💍'), highlight: true },
+    { href: '/masterclass',   label: t('Masterclass ⭐', 'Masterclass ⭐'), highlight: true },
   ]
 
   useEffect(() => {

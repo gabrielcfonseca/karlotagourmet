@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
       })
 
       if (res.ok) {
-        router.push('/admin/dashboard')
+        router.push('/admin/applications')
       } else {
         setError('Incorrect password. Please try again.')
         setPassword('')
