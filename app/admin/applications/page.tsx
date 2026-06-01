@@ -5,7 +5,7 @@ import {
   RefreshCw,
   ChevronDown,
   ChevronUp,
-  Instagram,
+  AtSign,
   Mail,
   Phone,
   DollarSign,
@@ -80,7 +80,7 @@ function ApplicationCard({ app }: { app: Application }) {
 
           {/* Contact row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ContactItem icon={Instagram} label="Instagram" value={`@${app.instagram}`} href={`https://instagram.com/${app.instagram}`} />
+            <ContactItem icon={AtSign} label="Instagram" value={`@${app.instagram}`} href={`https://instagram.com/${app.instagram}`} />
             <ContactItem icon={Mail}      label="Email"     value={app.email}           href={`mailto:${app.email}`} />
             <ContactItem icon={Phone}     label="WhatsApp"  value={app.whatsapp}        href={`https://wa.me/${app.whatsapp.replace(/\D/g, '')}`} />
           </div>
