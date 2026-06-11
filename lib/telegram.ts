@@ -1,7 +1,5 @@
 import type { Order } from './orders'
 
-const SITE = 'https://karlotagourmet.com'
-
 function chatIds(): string[] {
   return (process.env.TELEGRAM_CHAT_IDS ?? '')
     .split(',')
@@ -26,7 +24,7 @@ export async function sendOrderTelegram(order: Order): Promise<void> {
   const addressLine = order.delivery.type === 'delivery' ? `\n📍 ${order.delivery.address}` : ''
 
   const text =
-`🍽️ *New Order* #${order.id.slice(-6).toUpperCase()}
+`✅ *New Paid Order* #${order.id.slice(-6).toUpperCase()}
 
 👤 *${order.customer.name}*
 📧 ${order.customer.email}
@@ -40,24 +38,16 @@ ${itemsText}
 
 Subtotal: $${order.subtotal.toFixed(2)}
 Tax: $${order.tax.toFixed(2)}${order.deliveryFee > 0 ? `\nDelivery: $${order.deliveryFee.toFixed(2)}` : ''}
-*TOTAL: $${order.total.toFixed(2)}*`
+*TOTAL: $${order.total.toFixed(2)}*
 
-  const approveUrl = `${SITE}/api/orders/${order.id}/approve?token=${order.approvalToken}`
-  const rejectUrl = `${SITE}/api/orders/${order.id}/reject?token=${order.approvalToken}`
-
-  const reply_markup = {
-    inline_keyboard: [[
-      { text: '✅ Approve', url: approveUrl },
-      { text: '❌ Reject', url: rejectUrl },
-    ]],
-  }
+_Payment confirmed — order is being prepared._`
 
   await Promise.all(
     ids.map(chat_id =>
       fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id, text, parse_mode: 'Markdown', reply_markup }),
+        body: JSON.stringify({ chat_id, text, parse_mode: 'Markdown' }),
       }).catch(err => console.error('Telegram send error:', err))
     )
   )

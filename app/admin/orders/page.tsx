@@ -4,36 +4,24 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   RefreshCw, ChevronDown, ChevronUp, Calendar, Users,
   Clock, Truck, ShoppingBag, Loader2, Search, CheckCircle2,
-  XCircle, AlertCircle, DollarSign, Phone, Mail, MapPin,
+  AlertCircle, DollarSign, Phone, Mail, Mailbox,
 } from 'lucide-react'
 import type { Order } from '@/lib/orders'
 
 const STATUS_CONFIG = {
-  pending_payment:  { label: 'Pending Payment',  color: 'text-yellow-600', bg: 'bg-yellow-50',  border: 'border-yellow-200', icon: AlertCircle },
-  pending_approval: { label: 'Awaiting Approval', color: 'text-blue-600',   bg: 'bg-blue-50',    border: 'border-blue-200',   icon: Clock },
-  approved:         { label: 'Approved',           color: 'text-green-700',  bg: 'bg-green-50',   border: 'border-green-200',  icon: CheckCircle2 },
-  rejected:         { label: 'Rejected',           color: 'text-red-600',    bg: 'bg-red-50',     border: 'border-red-200',    icon: XCircle },
+  pending_payment: { label: 'Pending Payment', color: 'text-yellow-600', bg: 'bg-yellow-50',  border: 'border-yellow-200', icon: AlertCircle },
+  confirmed:       { label: 'Confirmed',        color: 'text-green-700',  bg: 'bg-green-50',   border: 'border-green-200',  icon: CheckCircle2 },
+  cancelled:       { label: 'Cancelled',        color: 'text-red-600',    bg: 'bg-red-50',     border: 'border-red-200',    icon: AlertCircle },
 }
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 
-function OrderCard({ order, onRefresh }: { order: Order; onRefresh: () => void }) {
+function OrderCard({ order }: { order: Order }) {
   const [open, setOpen] = useState(false)
-  const [acting, setActing] = useState<'approve' | 'reject' | null>(null)
   const cfg = STATUS_CONFIG[order.status]
   const StatusIcon = cfg.icon
-
-  async function act(action: 'approve' | 'reject') {
-    setActing(action)
-    try {
-      await fetch(`/api/orders/${order.id}/${action}?token=${order.approvalToken}`)
-      onRefresh()
-    } finally {
-      setActing(null)
-    }
-  }
 
   return (
     <div className="border border-cream-dark rounded-sm bg-white overflow-hidden">
@@ -95,27 +83,13 @@ function OrderCard({ order, onRefresh }: { order: Order; onRefresh: () => void }
             </div>
           </div>
 
-          {/* Approve / Reject buttons */}
-          {order.status === 'pending_approval' && (
-            <div className="flex gap-3 pt-2">
-              <button
-                onClick={() => act('approve')}
-                disabled={!!acting}
-                className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-700 text-white font-inter-tight font-semibold text-sm rounded-sm hover:bg-green-800 transition-colors disabled:opacity-50"
-              >
-                {acting === 'approve' ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
-                Approve Order
-              </button>
-              <button
-                onClick={() => act('reject')}
-                disabled={!!acting}
-                className="flex-1 flex items-center justify-center gap-2 py-3 bg-red-600 text-white font-inter-tight font-semibold text-sm rounded-sm hover:bg-red-700 transition-colors disabled:opacity-50"
-              >
-                {acting === 'reject' ? <Loader2 size={14} className="animate-spin" /> : <XCircle size={14} />}
-                Reject Order
-              </button>
-            </div>
-          )}
+          {/* Email status */}
+          <div className="flex items-center gap-2 pt-1">
+            <Mailbox size={13} className={order.emailSent ? 'text-green-600' : 'text-mocha/30'} />
+            <span className="font-inter-tight text-xs text-mocha/50">
+              {order.emailSent ? 'Customer requested email confirmation' : 'No email confirmation requested'}
+            </span>
+          </div>
         </div>
       )}
     </div>
@@ -175,8 +149,8 @@ export default function OrdersPage() {
     return !q || o.customer.name.toLowerCase().includes(q) || o.customer.email.toLowerCase().includes(q) || o.id.toLowerCase().includes(q)
   })
 
-  const pending = orders.filter(o => o.status === 'pending_approval').length
-  const revenue = orders.filter(o => o.status === 'approved').reduce((s, o) => s + o.total, 0)
+  const confirmed = orders.filter(o => o.status === 'confirmed').length
+  const revenue = orders.filter(o => o.status === 'confirmed').reduce((s, o) => s + o.total, 0)
 
   return (
     <div className="p-6 md:p-8 max-w-4xl mx-auto">
@@ -191,10 +165,10 @@ export default function OrdersPage() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-        <StatCard icon={Users}       label="Total Orders"    value={loading ? '—' : String(orders.length)} />
-        <StatCard icon={Clock}       label="Awaiting"        value={loading ? '—' : String(pending)} />
-        <StatCard icon={CheckCircle2} label="Approved"       value={loading ? '—' : String(orders.filter(o => o.status === 'approved').length)} />
-        <StatCard icon={DollarSign}  label="Revenue"         value={loading ? '—' : `$${revenue.toFixed(0)}`} />
+        <StatCard icon={Users}        label="Total Orders" value={loading ? '—' : String(orders.length)} />
+        <StatCard icon={CheckCircle2} label="Confirmed"    value={loading ? '—' : String(confirmed)} />
+        <StatCard icon={Clock}        label="This Week"    value={loading ? '—' : String(orders.filter(o => (Date.now() - new Date(o.createdAt).getTime()) / 86400000 <= 7).length)} />
+        <StatCard icon={DollarSign}   label="Revenue"      value={loading ? '—' : `$${revenue.toFixed(0)}`} />
       </div>
 
       {/* Filters */}
@@ -212,10 +186,9 @@ export default function OrdersPage() {
           className="px-3 py-2.5 bg-white border border-cream-dark rounded-sm font-inter-tight text-sm text-darkbrown focus:outline-none focus:border-gold transition-colors"
         >
           <option value="all">All Status</option>
-          <option value="pending_approval">Awaiting Approval</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
+          <option value="confirmed">Confirmed</option>
           <option value="pending_payment">Pending Payment</option>
+          <option value="cancelled">Cancelled</option>
         </select>
       </div>
 
@@ -235,7 +208,7 @@ export default function OrdersPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(o => <OrderCard key={o.id} order={o} onRefresh={fetch_} />)}
+          {filtered.map(o => <OrderCard key={o.id} order={o} />)}
         </div>
       )}
     </div>

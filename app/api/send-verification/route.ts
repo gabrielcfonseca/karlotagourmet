@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const isPortuguese = lang === 'pt'
 
     await resend.emails.send({
-      from: 'Karlota Gourmet <onboarding@resend.dev>',
+      from: 'Karlota Gourmet <noreply@karlotagourmet.com>',
       to: email,
       subject: isPortuguese ? 'Seu código de verificação — Karlota Gourmet' : 'Your verification code — Karlota Gourmet',
       html: `

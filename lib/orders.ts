@@ -12,7 +12,8 @@ export interface OrderItem {
 export interface Order {
   id: string
   createdAt: string
-  status: 'pending_payment' | 'pending_approval' | 'approved' | 'rejected'
+  status: 'pending_payment' | 'confirmed' | 'cancelled'
+  emailSent?: boolean
   customer: {
     name: string
     email: string
