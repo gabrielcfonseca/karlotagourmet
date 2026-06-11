@@ -127,7 +127,7 @@ export default function MasterclassPage() {
       {/* ─── HERO ────────────────────────────────────────────────────── */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-darkbrown">
         <Image
-          src="/image 1.JPG"
+          src="/COVER.JPG"
           alt="Karlota Gourmet Masterclass"
           fill
           priority

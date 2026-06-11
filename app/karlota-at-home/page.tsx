@@ -316,7 +316,7 @@ export default function KarlotaAtHomePage() {
 
       {/* Hero */}
       <section className="relative bg-darkbrown overflow-hidden" style={{ minHeight: '40vh' }}>
-        <Image src="/image 1.JPG" alt="Karlota at Home" fill priority className="object-cover opacity-25" sizes="100vw" />
+        <Image src="/COVER.JPG" alt="Karlota at Home" fill priority className="object-cover opacity-25" sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-b from-darkbrown/50 to-darkbrown/95" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 py-20 text-center">
           <div className="mb-6"><Logo variant="light" size="sm" /></div>

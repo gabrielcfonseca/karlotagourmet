@@ -29,7 +29,7 @@ export default function HomePage() {
       {/* ─── HERO ────────────────────────────────────────────────────────── */}
       <section className="relative min-h-dvh flex items-center justify-center overflow-hidden bg-darkbrown">
         <Image
-          src="/image 1.JPG"
+          src="/COVER.JPG"
           alt="Elegant catering event spread"
           fill
           priority

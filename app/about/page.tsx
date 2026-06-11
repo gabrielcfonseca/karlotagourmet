@@ -52,7 +52,7 @@ export default function AboutPage() {
             {/* Image */}
             <div className="fade-up relative aspect-[3/4] rounded-sm overflow-hidden shadow-[0_20px_70px_rgba(59,42,26,0.2)] order-2 lg:order-1">
               <Image
-                src="/image 6.JPG"
+                src="/VARIETY PROOF.JPG"
                 alt="Chef Karlota"
                 fill
                 className="object-cover"
@@ -177,9 +177,9 @@ export default function AboutPage() {
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-3 gap-3 sm:gap-5">
             {[
-              { src: '/image 3.JPG', alt: 'Karlota Gourmet event' },
-              { src: '/image 4.JPG', alt: 'Karlota Gourmet catering' },
-              { src: '/image 5.jpeg', alt: 'Karlota Gourmet table' },
+              { src: '/TESTIMONIAL 3.JPG', alt: 'Karlota Gourmet event' },
+              { src: '/TESTIMONIAL 1.JPG', alt: 'Karlota Gourmet catering' },
+              { src: '/TESTIMONIAL2.jpeg', alt: 'Karlota Gourmet table' },
             ].map(({ src, alt }, i) => (
               <div
                 key={i}
