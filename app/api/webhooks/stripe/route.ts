@@ -3,6 +3,7 @@ import Stripe from 'stripe'
 import { Resend } from 'resend'
 import { loadOrders, saveOrders } from '@/lib/orders'
 import type { OrderItem } from '@/lib/orders'
+import { sendOrderTelegram } from '@/lib/telegram'
 
 function getStripe() { return new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-05-27.dahlia' }) }
 function getResend() { return new Resend(process.env.RESEND_API_KEY) }
@@ -38,6 +39,10 @@ export async function POST(req: Request) {
   await saveOrders(orders)
 
   const order = orders[idx]
+
+  // Instant Telegram push with Approve/Reject buttons
+  await sendOrderTelegram(order)
+
   const approveUrl = `https://karlotagourmet.com/api/orders/${order.id}/approve?token=${order.approvalToken}`
   const rejectUrl  = `https://karlotagourmet.com/api/orders/${order.id}/reject?token=${order.approvalToken}`
 
