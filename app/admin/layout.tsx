@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { ClipboardList, LogOut, Menu, X, ChefHat } from 'lucide-react'
+import { ClipboardList, ShoppingBag, LogOut, Menu, X, ChefHat } from 'lucide-react'
 
 const NAV = [
-  { href: '/admin/applications', label: 'Aplicações', icon: ClipboardList },
+  { href: '/admin/applications', label: 'Aplicações',    icon: ClipboardList },
+  { href: '/admin/orders',       label: 'Karlota at Home', icon: ShoppingBag },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
